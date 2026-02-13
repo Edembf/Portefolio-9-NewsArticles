@@ -11,8 +11,26 @@ export default function NewsFormScreen({ route, navigation }) {
     articleToEdit ? articleToEdit.description : ""
   );
 
-  const saveArticle = async () => {
-    
+ const saveArticle = async () => {
+    const newArticle = { title, image, description };
+    try {
+      const existingArticles = await AsyncStorage.getItem("customArticles");
+      const articles = existingArticles ? JSON.parse(existingArticles) : [];
+
+      // Si vous modifiez un article, mettez-le à jour ; sinon, ajoutez-en un nouveau
+      if (articleToEdit !== undefined) {
+        articles[articleIndex] = newArticle;
+        await AsyncStorage.setItem("customArticles", JSON.stringify(articles));
+        if (onArticleEdited) onArticleEdited(); // Notifiez la modification
+      } else {
+        articles.push(newArticle); // Ajoutez un nouvel article
+        await AsyncStorage.setItem("customArticles", JSON.stringify(articles));
+      }
+
+      navigation.goBack(); // Retour à l'écran précédent
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement de l'article :", error);
+    }
   };
 
   return (

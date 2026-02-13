@@ -34,7 +34,7 @@ export default function FavoriteScreen() {
             borderRadius: 5,
             marginTop: 10,
             width: 100,
-            alignItems: "center ",
+            alignItems: "center",
           }}
         >
           <Text style={{ color: "#fff" }}>Go back</Text>
@@ -48,15 +48,47 @@ export default function FavoriteScreen() {
       {/* Heading */}
       <View testID="FavoriteArticles">
         <Text
-          style={{ fontSize: hp(3.8), marginTop: hp(4), marginLeft: 20 }}
+          style={{ fontSize: hp(3.8), marginTop: hp(4), marginLeft: 60 }}
           className="font-semibold text-neutral-600"
         >
           My Favorite Articles
         </Text>
       </View>
-    
-     
-     
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={{
+          backgroundColor: "#2563EB",
+          padding: 10,
+          borderRadius: 5,
+          marginTop: 10,
+          width: 100,
+          alignItems: "center",
+          marginLeft: 60,
+        }}
+      >
+        <Text style={{ color: "#fff" }}>Back</Text>
+      </TouchableOpacity>
+      <FlatList
+        data={favoriteArticlesList}
+        contentContainerStyle={styles.listContentContainer}
+        keyExtractor={(item) => item.idArticle} // Update the key according to your article data
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.cardContainer}
+            onPress={() => navigation.navigate("ArticleDetail", item)} // Navigate to the article detail screen
+          >
+            <Image
+              source={{ uri: item.thumbnail }} // Assuming your articles have a 'thumbnail' field
+              style={styles.articleImage}
+            />
+            <Text style={styles.articleTitle}>
+              {item.title.length > 20
+                ? `${item.title.slice(0, 20)}...`
+                : item.title}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
     </>
   );
 }
